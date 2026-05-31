@@ -7,14 +7,14 @@ class Spacer:
     """Utility class to print a spacer line."""
     
     @staticmethod
-    def equal_spacer():
-        print("\n" + "=" * 60 + "\n")
+    def equal_spacer(count = 60):
+        return "=" * count
 
-    def dash_spacer():
-        print("\n" + "-" * 60 + "\n")
+    def dash_spacer(count = 60):
+        return "-" * count
 
     def one_line_spacer():
-        print("\n")
+        print()
     
     def small_spacer():
         for i in range(3):
@@ -50,9 +50,9 @@ class TestFan:
 
     def main():
         Spacer.screen_clear()
-        Effects.slowtype("\n" + "=" * 60, delay=0.005)
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.005)
         Effects.slowtype("                  THE FAN CLASS — TestFan", delay = 0.02)
-        Effects.slowtype("=" * 60, delay=0.005)
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.005)
 
         # ── Fan 1: max speed, radius 10, yellow, ON ──────────────
         Spacer.one_line_spacer()
@@ -66,9 +66,23 @@ class TestFan:
         Effects.slowtype(f"  Speed  : {fan1.get_speed()}", delay = 0.02), time.sleep(0.67)
         Effects.slowtype(f"  Radius : {fan1.get_radius()}", delay = 0.02), time.sleep(0.67)
         Effects.slowtype(f"  Color  : {fan1.get_color()}", delay = 0.02), time.sleep(0.67)
-        Effects.slowtype(f"  On     : {fan1.is_on()}\n", delay = 0.02), time.sleep(0.67)
-
-TestFan.main()
+        Effects.slowtype(f"  On     : {fan1.is_on()}\n", delay = 0.02), time.sleep(2),
 
         # ── Fan 2: medium speed, radius 5, blue, OFF ─────────────
+        Effects.slowtype(Spacer.dash_spacer(), delay=0.005)
+        Spacer.one_line_spacer()
+        Effects.slowtype("Fan 2 (Speed: MEDIUM, Radius: 5, Color: Blue, On: False)", delay=0.02)
+        fan2 = Fan()
+        fan2.set_speed(Fan.MEDIUM)
+        fan2.set_radius(5)
+        fan2.set_color("Blue")
+        fan2.set_on(False)
 
+        Effects.slowtype(f"  Speed  : {fan2.get_speed()}", delay = 0.02), time.sleep(0.67)
+        Effects.slowtype(f"  Radius : {fan2.get_radius()}", delay = 0.02), time.sleep(0.67)
+        Effects.slowtype(f"  Color  : {fan2.get_color()}", delay = 0.02), time.sleep(0.67)
+        Effects.slowtype(f"  On     : {fan2.is_on()}\n", delay = 0.02), time.sleep(0.67)
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.005)
+
+
+TestFan.main()
