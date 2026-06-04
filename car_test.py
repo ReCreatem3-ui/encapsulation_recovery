@@ -119,3 +119,48 @@ class Elements:
         line = f'  {label}  [{bar}] {spd:>3} km/h)'
         sys.stdout.write(f'\r{line:<70}') 
         sys.stdout.flush()
+
+def interactive_drive(car):
+    """Interactive drive mode — hold W to accelerate, S to brake, Q to quit."""
+    if not KEYBOARD_AVAILABLE:
+        print(Elements.manual_center("\nKeyboard module not installed.", width=70))
+        print(Elements.manual_center("  Run: pip install keyboard", width=70))
+        print(Elements.manual_center("  Note: may require admin/root privileges.", width=70))
+        return
+
+    Effects.slowtype(Elements.separator("Interactive Drive"), delay=0.01)
+    Spacer.one_line_spacer()
+    Effects.slowtype(Elements.manual_center("Hold W to accelerate, S to brake, Q to quit", width=70), delay=0.01)
+    Spacer.one_line_spacer()
+
+    # Reset speed for interactive session
+    while car.get_speed() > 0:
+        car.brake()
+
+    try:
+        while True:
+            if keyboard.is_pressed('q'):
+                print(Elements.manual_center("\n\n  Engine off", width=70), end='', flush=True)
+                Effects.slowtype("...", delay=0.05)
+                time.sleep(1.6)
+                break
+            elif keyboard.is_pressed('w'):
+                warning = car.accelerate()
+                if warning:
+                    sys.stdout.write(f'\r{warning:<80}')
+                    sys.stdout.flush()
+                else:
+                    Elements.draw_bar(car.get_speed(), label="  Drive")
+            elif keyboard.is_pressed('s'):
+                warning = car.brake()
+                if warning:
+                    sys.stdout.write(f'\r{warning:<80}')
+                    sys.stdout.flush()
+                else:
+                    Elements.draw_bar(car.get_speed(), label="  Brake")
+            else:
+                Elements.draw_bar(car.get_speed(), label="  Drive")
+
+            time.sleep(1.0)
+    except KeyboardInterrupt:
+        print(Elements.manual_center("Interrupted."))
