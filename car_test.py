@@ -164,3 +164,42 @@ def interactive_drive(car):
             time.sleep(1.0)
     except KeyboardInterrupt:
         print(Elements.manual_center("Interrupted."))
+
+class App:
+    @staticmethod
+    def main():
+        Spacer.screen_clear()
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.0086)
+        Elements.animated_title()
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.0086), time.sleep(1.6)
+
+        # ── Car Input ─────────────────────────────────────────────
+        Effects.slowtype(Elements.separator("Register Your Car"), delay=0.01)
+        Spacer.one_line_spacer()
+
+        while True:
+            try:
+                year = int(input("    Year Model : "))
+                temp_car = Car(year, "temp")
+                temp_car.set_year_model(year)
+                break
+            except ValueError as e:
+                print(f"      {e}")
+
+        while True:
+            try:
+                make = input("    Car Name   : ").strip()
+                temp_car.set_make(make)
+                break
+            except ValueError as e:
+                print(f"      {e}")
+
+        my_car = Car(year, make)
+        Spacer.one_line_spacer()
+        Effects.slowtype(Spacer.equal_spacer(), delay=0.005), time.sleep(0.86)
+
+        Spacer.screen_clear()
+        Elements.title()
+        Effects.slowtype(Elements.ascii_car(), delay=0.001)
+        Effects.slowtype(Elements.manual_center(f"{my_car}"), delay=0.01)
+        Effects.slowtype(Elements.manual_center(f"Top Speed: {Car.MAX_SPEED} km/h"), delay=0.01), time.sleep(0.86)
