@@ -34,6 +34,28 @@ class Car:
         if not isinstance(make, str) or not make.strip():
             raise ValueError("Please input a car model name as a non-empty string.")
         self.__make = make
+    
+    # ── Behaviours ───────────────────────────────────────────
+    def accelerate(self):
+        if self.__speed < Car.MAX_SPEED:
+            self.__speed = min(self.__speed + Car.ACCEL_STEP, Car.MAX_SPEED)
+        else:
+            print(f"  ⚠  Already at maximum speed ({Car.MAX_SPEED} km/h)!")
+
+    def brake(self):
+        if self.__speed > Car.MIN_SPEED:
+            self.__speed = max(self.__speed - Car.BRAKE_STEP, Car.MIN_SPEED)
+        else:
+            print("  ⚠  Car is already fully stopped!")
+
+    def speedometer(self):
+        """Animate a speedometer bar filling up to current speed."""
+        bar_width = 30
+        filled = self.__speed // 5
+        bar = '▄' * filled + ' ' * (bar_width - filled)
+        percent = int((self.__speed / Car.MAX_SPEED) * 100)
+        print(f'  Speedometer: [{bar}] {self.__speed} km/h ({percent}%)')
+    print()
 
     def __str__(self):
         return f"{self.__year_model}{self.__make}"

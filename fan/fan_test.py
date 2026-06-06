@@ -1,6 +1,5 @@
 import os
 import time
-import sys
 from fan import Fan
 
 class Spacer:
