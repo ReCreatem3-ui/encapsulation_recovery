@@ -76,6 +76,13 @@ class Pet:
         if self.__happiness == self.MAX_HAPPINESS:
             return f"  {self.__name} is having the time of their life! "
         return f"  {self.__name} plays eagerly. Happiness: {self.__happiness}/{self.MAX_HAPPINESS}"
+    
+    # ── Display helpers ───────────────────────────────────────
+    def _stat_bar(self, value, max_val=10, width=10):
+        """Generate a stat bar with filled and empty blocks."""
+        filled = round((value / max_val) * width)
+        return '█' * filled + '░' * (width - filled)
 
     def __str__(self):
         return f"{self.__age} year old {self.__animal_type}: {self.__name}"
+
