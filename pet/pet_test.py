@@ -189,15 +189,18 @@ def manual_center(text, width=175):
     padding = (width - len(text)) // 2
     return ' ' * padding + text
 
-
-def separator(title_text=""):
-    width = 70
+def separator(title_text="", total_width=175):
+    """Return a centered separator line with optional title."""
+    line_width = 70  # Width of the separator itself
     if title_text:
-        pad = (width - len(title_text) - 2) // 2
-        return f"\n{'═' * pad} {title_text} {'═' * pad}"
+        pad = (line_width - len(title_text) - 2) // 2
+        sep_line = f"{'═' * pad} {title_text} {'═' * pad}"
     else:
-        return "─" * width
-
+        sep_line = "─" * line_width
+    
+    # Center the entire separator line within total_width
+    padding = (total_width - len(sep_line)) // 2
+    return f"\n{' ' * padding}{sep_line}"
 
 def animate_stat(label, from_val, to_val, max_val=10, bar_width=10, step_delay=0.3):
     """Animate a stat bar filling or draining."""
@@ -215,3 +218,12 @@ class App():
     @staticmethod
     def main():
         Spacer.screen_clear()
+        print(title()), time.sleep(0.4)
+        input(manual_center("Press Enter to proceed..."))
+
+        # ── Pet Input ─────────────────────────────────────────────
+        Effects.slowtype(separator("Register Your Pet"), delay=0.01)
+
+
+App.main()
+
