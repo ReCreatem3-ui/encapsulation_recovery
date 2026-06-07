@@ -82,6 +82,31 @@ class Pet:
         """Generate a stat bar with filled and empty blocks."""
         filled = round((value / max_val) * width)
         return '█' * filled + '░' * (width - filled)
+    
+    def profile_card(self):
+        """Return a simple formatted profile card for the pet."""
+        name = self.get_name() or "Unknown"
+        atype = self.get_animal_type() or "Unknown"
+        age = f"{self.get_age()} year(s)" if self.get_age() is not None else "Unknown"
+
+        fullness = Pet.MAX_HUNGER - self.get_hunger()
+        happiness = self.get_happiness()
+
+        hunger_bar = self._stat_bar(fullness)
+        happiness_bar = self._stat_bar(happiness)
+
+        return (
+            f"\n{'=' * 50}\n"
+            f"            PET PROFILE CARD\n"
+            f"{'-' * 50}\n"
+            f"  Name        : {name}\n"
+            f"  Animal Type : {atype}\n"
+            f"  Age         : {age}\n"
+            f"{'-' * 50}\n"
+            f"  Fullness    : [{hunger_bar}] {fullness}/10\n"
+            f"  Happiness   : [{happiness_bar}] {happiness}/10\n"
+            f"{'=' * 50}\n"
+        )
 
     def __str__(self):
         return f"{self.__age} year old {self.__animal_type}: {self.__name}"
