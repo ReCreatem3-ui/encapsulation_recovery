@@ -50,12 +50,17 @@ class Car:
 
     def speedometer(self):
         """Animate a speedometer bar filling up to current speed."""
-        bar_width = 30
-        filled = self.__speed // 5
-        bar = '▄' * filled + ' ' * (bar_width - filled)
-        percent = int((self.__speed / Car.MAX_SPEED) * 100)
-        print(f'  Speedometer: [{bar}] {self.__speed} km/h ({percent}%)')
-    print()
+        total_blocks = 20
+        target = int((self.__speed / Car.MAX_SPEED) * total_blocks)
+        
+        for i in range(target + 1):
+            bar = '▄' * i + ' ' * (total_blocks - i)
+            percent = int((i / total_blocks) * 100)
+            sys.stdout.write(f'\r  [{bar}] {self.__speed} km/h ({percent}%)')
+            sys.stdout.flush()
+            time.sleep(0.05)
+            print()
 
     def __str__(self):
         return f"{self.__year_model}{self.__make}"
+    
