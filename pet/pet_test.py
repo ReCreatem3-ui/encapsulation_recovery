@@ -203,12 +203,17 @@ def separator(title_text="", total_width=175):
     return f"\n{' ' * padding}{sep_line}"
 
 def animate_stat(label, from_val, to_val, max_val=10, bar_width=10, step_delay=0.3):
-    """Animate a stat bar filling or draining."""
+    """Animate a stat bar filling or draining (centered)."""
     direction = 1 if to_val >= from_val else -1
     for val in range(from_val, to_val + direction, direction):
         filled = round((val / max_val) * bar_width)
         bar = '█' * filled + '░' * (bar_width - filled)
-        sys.stdout.write(f'\r  {label}  [{bar}] {val:>2}/{max_val}')
+        if label:
+            animation_line = f'{label}: [{bar}] {val:>2}/{max_val}'
+        else:
+            animation_line = f'[{bar}] {val:>2}/{max_val}'
+        padding = (175 - len(animation_line)) // 2
+        sys.stdout.write(f'\r{" " * padding}{animation_line}')
         sys.stdout.flush()
         time.sleep(step_delay)
     print()
@@ -304,7 +309,6 @@ class App():
         print(manual_center(my_pet.profile_card()))
         Spacer.one_line_spacer()
         time.sleep(1.2)
-
 
 if __name__ == "__main__":
     App.main()
