@@ -168,7 +168,8 @@ def interactive_drive(car):
         print(manual_center("Interrupted."))
 
 class App:
-    def main(self):
+    @staticmethod
+    def main():
         Spacer.screen_clear()
         Effects.slowtype(Spacer.equal_spacer(), delay=0.0086)
         animated_title()
@@ -179,21 +180,41 @@ class App:
         Spacer.one_line_spacer()
 
         while True:
+            Spacer.screen_clear()  
+            title()               
+            Effects.slowtype(separator("Register Your Car"), delay=0.01)
+            Spacer.one_line_spacer()
+
             try:
-                year = int(input("    Year Model : "))
+                year_input = input("    Year Model : ").strip()
+                if not year_input.isdigit():
+                    raise ValueError("Year must be a number, try again.")
+                year = int(year_input)
                 temp_car = Car(year, "temp")
                 temp_car.set_year_model(year)
-                break
+                break  
             except ValueError as e:
-                print(f"      {e}")
+                Effects.slowtype(f"\n      ⚠ {e}", delay=0.02)
+                time.sleep(1.5)
 
+        # ── Car Name ──────────────────────────────────────────────
         while True:
+            Spacer.screen_clear()
+            title()
+            Effects.slowtype(separator("Register Your Car"), delay=0.01)
+            Spacer.one_line_spacer()
+            print(f"    Year Model : {year}")  
+
             try:
                 make = input("    Car Name   : ").strip()
+                if not make:
+                    raise ValueError("Car name cannot be empty.")
+                temp_car = Car(year, make)
                 temp_car.set_make(make)
                 break
             except ValueError as e:
-                print(f"      {e}")
+                Effects.slowtype(f"\n      ⚠ {e}", delay=0.02)
+                time.sleep(1.5)
 
         my_car = Car(year, make)
         Spacer.one_line_spacer()
