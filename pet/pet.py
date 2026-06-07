@@ -77,3 +77,5 @@ class Pet:
             return f"  {self.__name} is having the time of their life! "
         return f"  {self.__name} plays eagerly. Happiness: {self.__happiness}/{self.MAX_HAPPINESS}"
 
+    def __str__(self):
+        return f"{self.__age} year old {self.__animal_type}: {self.__name}"
