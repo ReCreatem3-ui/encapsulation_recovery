@@ -82,7 +82,7 @@ class Pet:
         """Generate a stat bar with filled and empty blocks."""
         filled = round((value / max_val) * width)
         return '█' * filled + '░' * (width - filled)
-    
+        
     def profile_card(self):
         """Return a simple formatted profile card for the pet."""
         name = self.get_name() or "Unknown"
@@ -96,16 +96,17 @@ class Pet:
         happiness_bar = self._stat_bar(happiness)
 
         return (
-            f"\n{'=' * 50}\n"
-            f"            PET PROFILE CARD\n"
-            f"{'-' * 50}\n"
-            f"  Name        : {name}\n"
-            f"  Animal Type : {atype}\n"
-            f"  Age         : {age}\n"
-            f"{'-' * 50}\n"
-            f"  Fullness    : [{hunger_bar}] {fullness}/10\n"
-            f"  Happiness   : [{happiness_bar}] {happiness}/10\n"
-            f"{'=' * 50}\n"
+            f"{' ' * 62}\n"
+            f"{' ' * 62}{'=' * 50}\n"
+            f"{' ' * 62}                 PET PROFILE CARD\n"
+            f"{' ' * 62}{'-' * 50}\n"
+            f"{' ' * 62}  Name        : {name}\n"
+            f"{' ' * 62}  Animal Type : {atype}\n"
+            f"{' ' * 62}  Age         : {age}\n"
+            f"{' ' * 62}{'-' * 50}\n"
+            f"{' ' * 62}  Fullness    : |{hunger_bar}| {fullness}/10\n"
+            f"{' ' * 62}  Happiness   : |{happiness_bar}| {happiness}/10\n"
+            f"{' ' * 62}{'=' * 50}\n"
         )
 
     def __str__(self):
