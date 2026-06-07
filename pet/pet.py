@@ -48,4 +48,32 @@ class Pet:
         if age < 0 or age > 100:
             raise ValueError("Age must be between 0 and 100.")
         self.__age = age
+    
+    def set_age(self, age):
+        try:
+            age = int(age)
+        except (ValueError, TypeError):
+            raise ValueError("Age must be a whole number.")
+        if age < 0 or age > 100:
+            raise ValueError("Age must be between 0 and 100.")
+        self.__age = age
+
+    # ── Behaviours ───────────────────────────────────────────
+    def feed(self):
+        """Decrease hunger by 2 (min 0). Returns a status message."""
+        if self.__hunger == 0:
+            return f"  {self.__name} is already full and turns away!"
+        self.__hunger = max(0, self.__hunger - 2)
+        if self.__hunger == 0:
+            return f"  {self.__name} gobbled everything up. Tummy full! "
+        return f"  {self.__name} munches happily. Hunger: {self.__hunger}/{self.MAX_HUNGER}"
+
+    def play(self):
+        """Increase happiness by 2 (max 10). Returns a status message."""
+        if self.__happiness == self.MAX_HAPPINESS:
+            return f"  {self.__name} is already bursting with joy!"
+        self.__happiness = min(self.MAX_HAPPINESS, self.__happiness + 2)
+        if self.__happiness == self.MAX_HAPPINESS:
+            return f"  {self.__name} is having the time of their life! "
+        return f"  {self.__name} plays eagerly. Happiness: {self.__happiness}/{self.MAX_HAPPINESS}"
 
