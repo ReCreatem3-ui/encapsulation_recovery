@@ -194,7 +194,7 @@ def ascii_pet(animal_type):
     }
     return ascii_map.get(animal_type)
 
-def manual_center(text, width=70):
+def manual_center(text, width=175):
     if len(text) >= width:
         return text
     padding = (width - len(text)) // 2
@@ -221,3 +221,8 @@ def animate_stat(label, from_val, to_val, max_val=10, bar_width=10, step_delay=0
         time.sleep(step_delay)
     print()
 
+class App():
+    
+    @staticmethod
+    def main():
+        Spacer.screen_clear()
