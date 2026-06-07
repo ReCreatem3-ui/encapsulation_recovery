@@ -193,3 +193,31 @@ def ascii_pet(animal_type):
 """
     }
     return ascii_map.get(animal_type)
+
+def manual_center(text, width=70):
+    if len(text) >= width:
+        return text
+    padding = (width - len(text)) // 2
+    return ' ' * padding + text
+
+
+def separator(title_text=""):
+    width = 70
+    if title_text:
+        pad = (width - len(title_text) - 2) // 2
+        return f"\n{'═' * pad} {title_text} {'═' * pad}"
+    else:
+        return "─" * width
+
+
+def animate_stat(label, from_val, to_val, max_val=10, bar_width=10, step_delay=0.3):
+    """Animate a stat bar filling or draining."""
+    direction = 1 if to_val >= from_val else -1
+    for val in range(from_val, to_val + direction, direction):
+        filled = round((val / max_val) * bar_width)
+        bar = '█' * filled + '░' * (bar_width - filled)
+        sys.stdout.write(f'\r  {label}  [{bar}] {val:>2}/{max_val}')
+        sys.stdout.flush()
+        time.sleep(step_delay)
+    print()
+
