@@ -169,7 +169,7 @@ def interactive_drive(car):
             else:
                 draw_bar(car.get_speed(), label="  Drive")
 
-            time.sleep(1.0)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         print(manual_center("Interrupted."))
 
@@ -230,7 +230,7 @@ class App:
         Effects.slowtype(manual_center(f"Top Speed: {Car.MAX_SPEED} km/h"), delay=0.01), time.sleep(0.86)
 
         # ── Accelerate ────────────────────────────────────────────
-        Effects.slowtype(separator("Accelerating Test"), delay=0.01)
+        Effects.slowtype(separator("Acceleration Test"), delay=0.01)
         for _ in range(5):
             time.sleep(0.2)
             my_car.accelerate()
