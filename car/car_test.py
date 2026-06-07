@@ -17,22 +17,28 @@ class Spacer:
     def equal_spacer(count=69):
         return "=" * count
 
+    @staticmethod
     def dash_spacer(count=69):
         return "-" * count
 
+    @staticmethod
     def one_line_spacer():
         print()
 
+    @staticmethod
     def small_spacer():
         for i in range(3):
             print()
 
+    @staticmethod
     def screen_clear():
         os.system('cls' if os.name == 'nt' else 'clear')
 
+    @staticmethod
     def low_bar_divider(count=86):
         return "  " + "▄" * count
 
+    @staticmethod
     def high_bar_divider(count=86):
         return "  " + "▀" * count
 
@@ -142,7 +148,7 @@ def interactive_drive(car):
     try:
         while True:
             if keyboard.is_pressed('q'):
-                print(manual_center("\n\nEngine off", width=70), end='', flush=True)
+                print(manual_center("\n\n  Engine off", width=70), end='', flush=True)
                 Effects.slowtype("...", delay=0.05)
                 time.sleep(1.6)
                 break
@@ -176,9 +182,6 @@ class App:
         Effects.slowtype(Spacer.equal_spacer(), delay=0.0086), time.sleep(1.6)
 
         # ── Car Input ─────────────────────────────────────────────
-        Effects.slowtype(separator("Register Your Car"), delay=0.01)
-        Spacer.one_line_spacer()
-
         while True:
             Spacer.screen_clear()  
             title()               
