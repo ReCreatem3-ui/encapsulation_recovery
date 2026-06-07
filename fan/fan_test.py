@@ -9,28 +9,35 @@ class Spacer:
     def equal_spacer(count = 60):
         return "=" * count
 
+    @staticmethod
     def dash_spacer(count = 60):
         return "-" * count
 
+    @staticmethod
     def one_line_spacer():
         print()
     
+    @staticmethod
     def small_spacer():
         for i in range(3):
             print()
 
+    @staticmethod
     def medium_spacer():
         for i in range(5):
             print()
 
+    @staticmethod
     def large_spacer():
         for i in range(10):
             print()
 
+    @staticmethod
     def big_spacer():
         for i in range(20):
             print()
 
+    @staticmethod
     def screen_clear():
         os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -46,7 +53,8 @@ class Effects:
 
 class TestFan:
     """Test program for the Fan class."""
-
+    
+    @staticmethod
     def main():
         Spacer.screen_clear()
         Effects.slowtype(Spacer.equal_spacer(), delay=0.005)
