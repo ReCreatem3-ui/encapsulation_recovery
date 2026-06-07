@@ -49,12 +49,12 @@ class Effects:
 
 def title():
     return("""
-                                                        ██████╗ ███████╗████████╗     ██████╗ █████╗ ██████╗ ███████╗
-                                                        ██╔══██╗██╔════╝╚══██╔══╝    ██╔════╝██╔══██╗██╔══██╗██╔════╝
-                                                        ██████╔╝█████╗     ██║       ██║     ███████║██████╔╝█████╗  
-                                                        ██╔═══╝ ██╔══╝     ██║       ██║     ██╔══██║██╔══██╗██╔══╝  
-                                                        ██║     ███████╗   ██║       ╚██████╗██║  ██║██║  ██║███████╗
-                                                        ╚═╝     ╚══════╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+                                                         ██████╗ ███████╗████████╗     ██████╗ █████╗ ██████╗ ███████╗
+                                                         ██╔══██╗██╔════╝╚══██╔══╝    ██╔════╝██╔══██╗██╔══██╗██╔════╝
+                                                         ██████╔╝█████╗     ██║       ██║     ███████║██████╔╝█████╗  
+                                                         ██╔═══╝ ██╔══╝     ██║       ██║     ██╔══██║██╔══██╗██╔══╝  
+                                                         ██║     ███████╗   ██║       ╚██████╗██║  ██║██║  ██║███████╗
+                                                         ╚═╝     ╚══════╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
 """)
 
 def ascii_pet(animal_type):
@@ -218,12 +218,84 @@ class App():
     @staticmethod
     def main():
         Spacer.screen_clear()
-        print(title()), time.sleep(0.4)
+        print(title())
+        time.sleep(0.4)
         input(manual_center("Press Enter to proceed..."))
 
         # ── Pet Input ─────────────────────────────────────────────
+        name = None
+        animal_type = None
+        age = None
+
+        Spacer.screen_clear()
+        print(title())
         Effects.slowtype(separator("Register Your Pet"), delay=0.01)
+        Spacer.one_line_spacer()
+
+        # ── Name Input ────────────────────────────────────────────
+        while name is None:
+            try:
+                name_input = input(' ' * 62 + "Pet's Name      : ").strip()
+                if not name_input:
+                    raise ValueError("Name cannot be empty.")
+                name = name_input
+            except ValueError as e:
+                print(manual_center(f"      {e}"))
+                time.sleep(1.5)
+                Spacer.screen_clear()
+                print(title())
+                print(separator("Register Your Pet")) 
+                Spacer.one_line_spacer()
+
+        # ── Animal Type Input ─────────────────────────────────────
+        while animal_type is None:
+            Spacer.screen_clear()
+            print(title())
+            print(separator("Register Your Pet"))
+            Spacer.one_line_spacer()
+            print(' ' * 62 + f"Pet's Name      : {name}")
+            
+            try:
+                atype_input = input(' ' * 62 + "Animal Type     : ").strip()
+                if not atype_input:
+                    raise ValueError("Animal type cannot be empty.")
+                atype_input = atype_input.title()
+                if atype_input not in Pet.ANIMAL_TYPES:
+                    raise ValueError(f"Animal type must be one of: {', '.join(Pet.ANIMAL_TYPES)}")
+                animal_type = atype_input
+            except ValueError as e:
+                print(manual_center(f"      {e}"))
+                time.sleep(1.5)
+
+        # ── Age Input ─────────────────────────────────────────────
+        while age is None:
+            Spacer.screen_clear()
+            print(title())
+            print(separator("Register Your Pet"))
+            Spacer.one_line_spacer()
+            print(' ' * 62 + f"Pet's Name      : {name}")
+            print(' ' * 62 + f"Animal Type     : {animal_type}")
+            
+            try:
+                age_input = input(' ' * 62 + "Age (years)     : ").strip()
+                if not age_input:
+                    raise ValueError("Age cannot be empty.")
+                try:
+                    age_value = int(age_input)
+                except ValueError:
+                    raise ValueError("Age must be a whole number (e.g., 3, 5, 10).")
+                if age_value < 0 or age_value > 100:
+                    raise ValueError("Age must be between 0 and 100.")
+                age = age_value
+            except ValueError as e:
+                print(manual_center(f"      {e}"))
+                time.sleep(1.5)
+
+        my_pet = Pet(name, animal_type, age)
+        print(separator())
+        time.sleep(0.005)
 
 
-App.main()
+if __name__ == "__main__":
+    App.main()
 
