@@ -165,8 +165,10 @@ class Sound:
  
     @staticmethod
     def on_quit():
-        Sound.stop_music()
         Sound.play_sfx("quit", Sound.SFX_QUIT_FILE)
+
+    def on_close():
+        Sound.stop_music()
  
     @staticmethod
     def on_navigate():
@@ -415,10 +417,12 @@ class App():
         while name is None:
             try:
                 name_input = input(' ' * 62 + "Pet's Name      : ").strip()
+                Sound.on_navigate()
                 if not name_input:
                     raise ValueError("Name cannot be empty.")
                 name = name_input
             except ValueError as e:
+                Sound.on_error()
                 print(manual_center(f"      {e}"))
                 time.sleep(1.5)
                 Spacer.screen_clear()
@@ -436,6 +440,7 @@ class App():
             
             try:
                 atype_input = input(' ' * 62 + "Animal Type     : ").strip()
+                Sound.on_navigate()
                 if not atype_input:
                     raise ValueError("Animal type cannot be empty.")
                 atype_input = atype_input.title()
@@ -443,6 +448,7 @@ class App():
                     raise ValueError(f"Animal type must be one of: {', '.join(Pet.ANIMAL_TYPES)}")
                 animal_type = atype_input
             except ValueError as e:
+                Sound.on_error()
                 print(manual_center(f"      {e}"))
                 time.sleep(1.5)
 
@@ -457,6 +463,7 @@ class App():
             
             try:
                 age_input = input(' ' * 62 + "Age (years)     : ").strip()
+                Sound.on_navigate()
                 if not age_input:
                     raise ValueError("Age cannot be empty.")
                 try:
@@ -467,10 +474,30 @@ class App():
                     raise ValueError("Age must be between 0 and 100.")
                 age = age_value
             except ValueError as e:
+                Sound.on_error()
                 print(manual_center(f"      {e}"))
                 time.sleep(1.5)
 
         my_pet = Pet(name, animal_type, age)
+
+        # ── Animal sound effect ────────────────────────────────────
+        animal_sounds = {
+            "Cat": Sound.on_cat,
+            "Dog": Sound.on_dog,
+            "Bird": Sound.on_bird,
+            "Fish": Sound.on_fish,
+            "Turtle": Sound.on_turtle,
+            "Rabbit": Sound.on_rabbit
+        }
+
+        # Store the sound function for later reuse
+        pet_sound = animal_sounds.get(animal_type)
+
+        # Play it the first time
+        if pet_sound:
+            pet_sound()
+            time.sleep(0.5)
+
         print(separator())
         time.sleep(0.005)
 
@@ -478,7 +505,9 @@ class App():
         Spacer.screen_clear()
         print(title())
         Effects.slowtype(ascii_pet(my_pet.get_animal_type()), delay=0.001)
+        pet_sound()
         Effects.slowtype(manual_center(f"{my_pet}"), delay=0.01)
+        time.sleep(1)
         Spacer.one_line_spacer()
         print(manual_center(my_pet.profile_card()))
         Spacer.one_line_spacer()
@@ -493,7 +522,9 @@ class App():
         Effects.slowtype(ascii_pet(my_pet.get_animal_type()), delay=0.001)
         Effects.slowtype(separator("Final Profile"), delay=0.01)
         Spacer.one_line_spacer()
+        Sound.on_profile()
         print(manual_center(my_pet.profile_card()))
+        time.sleep(0.5)
         Spacer.one_line_spacer()
         time.sleep(1.2)
         print(manual_center(Spacer.equal_spacer()))
@@ -503,6 +534,7 @@ class App():
         Spacer.screen_clear()
         print(title())
         print(ascii_pet(my_pet.get_animal_type()))
+        pet_sound()
         Spacer.one_line_spacer()
         print(manual_center(Spacer.equal_spacer()))
         Spacer.one_line_spacer()
@@ -527,6 +559,7 @@ class App():
             Effects.slowtype(manual_center("Feed (F) or Play (P)? Type 'Q' to finish"), delay=0.01)
             Spacer.one_line_spacer()
             print(manual_center(pet.profile_card()))
+            Sound.on_profile()
             Spacer.one_line_spacer()
             
             choice = input(manual_center("Action (F/P/Q) : ")).strip().upper()
@@ -534,6 +567,7 @@ class App():
             if choice == 'Q':
                 Spacer.screen_clear()
                 print(title())
+                Sound.on_quit()
                 print(manual_center("Time for rest..."))
                 time.sleep(2)
                 break
@@ -545,19 +579,27 @@ class App():
                 Spacer.screen_clear()
                 print(title())
                 print(ascii_pet(pet.get_animal_type()))
+                Sound.on_feed()
                 print(manual_center(msg))
                 Spacer.one_line_spacer()
 
                 fullness_before = Pet.MAX_HUNGER - hunger_before
                 fullness_after = Pet.MAX_HUNGER - hunger_after
-                Effects.slowtype(manual_center("Fullness bar:", width=175), delay=0.015)
+                
+                Effects.slowtype(manual_center("Fullness bar", width=175), delay=0.015)
                 Spacer.one_line_spacer()
+                Sound.on_stat_up()
                 animate_stat("Fullness", fullness_before, fullness_after, step_delay=0.25)
+                time.sleep(0.5)
 
-                Spacer.one_line_spacer()
+                Spacer.screen_clear()
+                print(title())
+                print(ascii_pet(pet.get_animal_type()))
+                Sound.on_profile()
                 print(manual_center(pet.profile_card()))
                 Spacer.one_line_spacer()
                 input(manual_center("Press Enter to continue..."))
+                Sound.on_navigate()
             elif choice == 'P':
                 happiness_before = pet.get_happiness()
                 msg = pet.play()
@@ -566,18 +608,26 @@ class App():
                 Spacer.screen_clear()
                 print(title())
                 print(ascii_pet(pet.get_animal_type()))
+                Sound.on_play()
                 print(manual_center(msg))
                 Spacer.one_line_spacer()
 
-                Effects.slowtype(manual_center("Happiness bar:", width=175), delay=0.015)
+                Effects.slowtype(manual_center("Happiness bar", width=175), delay=0.015)
                 Spacer.one_line_spacer()
+                Sound.on_stat_up()
                 animate_stat("Happiness", happiness_before, happiness_after, step_delay=0.25)
+                time.sleep(0.5)
 
-                Spacer.one_line_spacer()
+                Spacer.screen_clear()
+                print(title())
+                print(ascii_pet(pet.get_animal_type()))
+                Sound.on_profile()
                 print(manual_center(pet.profile_card()))
                 Spacer.one_line_spacer()
                 input(manual_center("Press Enter to continue..."))
+                Sound.on_navigate()
             else:
+                Sound.on_error()
                 print(manual_center("    Invalid action. Please enter F, P, or Q."))
                 time.sleep(1.2)
 
