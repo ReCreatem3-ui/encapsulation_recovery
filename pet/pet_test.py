@@ -309,6 +309,36 @@ class App():
         print(manual_center(my_pet.profile_card()))
         Spacer.one_line_spacer()
         time.sleep(1.2)
+
+        # ── Interactive Care Launcher ─────────────────────────────
+        App.interactive_care(my_pet)
+
+        # ── Final Profile ─────────────────────────────────────────
+        Spacer.screen_clear()
+        print(title())
+        Effects.slowtype(ascii_pet(my_pet.get_animal_type()), delay=0.001)
+        Effects.slowtype(separator("Final Profile"), delay=0.01)
+        Spacer.one_line_spacer()
+        print(manual_center(my_pet.profile_card()))
+        Spacer.one_line_spacer()
+        time.sleep(1.2)
+        print(manual_center(Spacer.equal_spacer()))
+        time.sleep(2)
+
+        # ── Outro ─────────────────────────────────────────────────
+        Spacer.screen_clear()
+        print(title())
+        print(ascii_pet(my_pet.get_animal_type()))
+        Spacer.one_line_spacer()
+        print(manual_center(Spacer.equal_spacer()))
+        Spacer.one_line_spacer()
+        Effects.slowtype(manual_center("Thank you for testing the Pet class!"), delay=0.01)
+        time.sleep(0.4)
+        Effects.slowtype(manual_center(f"Take good care of {my_pet.get_name()}! "), delay=0.01)
+        Spacer.one_line_spacer()
+        print(manual_center(Spacer.equal_spacer()))
+        time.sleep(2)
+        Spacer.screen_clear()
     
     @staticmethod
     def interactive_care(pet):
