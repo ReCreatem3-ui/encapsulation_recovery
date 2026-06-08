@@ -2,7 +2,11 @@ from pet import Pet
 import sys
 import time
 import os
-
+try:
+    import pygame
+    _PYGAME_AVAILABLE = True
+except ImportError:
+    _PYGAME_AVAILABLE = False
 
 class Spacer:
     """Utility class to print spacer lines."""
@@ -46,6 +50,126 @@ class Effects:
             print(char, end='', flush=True)
             time.sleep(delay)
         print()
+
+class Sound:
+    # ── File names (place these in pet/assets/sounds/) ─────────────────
+    MUSIC_BG_FILE   = "pet_care_bgm.wav"
+    SFX_OPEN_FILE   = "sfx_open.wav"
+    SFX_CLOSE_FILE  = "sfx_close.wav"
+    SFX_NAVIGATE_FILE = "sfx_navigate.wav"
+    SFX_FEED_FILE   = "sfx_feed.wav"
+    SFX_PLAY_FILE   = "sfx_play.wav"
+    
+    # ── Volume levels (0.0 – 1.0) ─────────────────────────────────────
+    MUSIC_VOLUME  = 0.4   # background music — keep lower than SFX
+    SFX_VOLUME    = 0.7   # all sound effects
+ 
+    # ── Fade durations (milliseconds) ─────────────────────────────────
+    MUSIC_FADE_IN  = 1500
+    MUSIC_FADE_OUT = 2000
+ 
+    _ready = False
+    _sound_dir = None
+    _sounds = {}  # cache for loaded sound effects
+ 
+    @staticmethod
+    def init():
+        """Call once at the very start of the app."""
+        if not _PYGAME_AVAILABLE:
+            return
+        try:
+            pygame.mixer.init()
+            Sound._ready = True
+            script_dir = os.path.dirname(__file__)
+            Sound._sound_dir = os.path.join(script_dir, "assets", "sounds")
+            os.makedirs(Sound._sound_dir, exist_ok=True)
+        except Exception:
+            pass
+ 
+    @staticmethod
+    def _get_path(filename):
+        """Get full path to a sound file."""
+        if Sound._sound_dir:
+            return os.path.join(Sound._sound_dir, filename)
+        return filename
+ 
+    @staticmethod
+    def _load_sfx(name, filepath):
+        """Load a sound effect into cache."""
+        if not Sound._ready:
+            return None
+        try:
+            full_path = Sound._get_path(filepath)
+            if os.path.exists(full_path):
+                sfx = pygame.mixer.Sound(full_path)
+                sfx.set_volume(Sound.SFX_VOLUME)
+                Sound._sounds[name] = sfx
+                return sfx
+        except Exception:
+            pass
+        return None
+ 
+    @staticmethod
+    def play_sfx(name, filepath, volume=None):
+        """Play a sound effect once (non-blocking)."""
+        if not Sound._ready:
+            return
+        if name not in Sound._sounds:
+            Sound._load_sfx(name, filepath)
+        sfx = Sound._sounds.get(name)
+        if sfx:
+            vol = volume if volume is not None else Sound.SFX_VOLUME
+            sfx.set_volume(vol)
+            sfx.play()
+ 
+    @staticmethod
+    def play_music():
+        """Start background music on infinite loop with fade-in."""
+        if not Sound._ready:
+            return
+        path = Sound._get_path(Sound.MUSIC_BG_FILE)
+        if os.path.exists(path):
+            try:
+                pygame.mixer.music.load(path)
+                pygame.mixer.music.set_volume(Sound.MUSIC_VOLUME)
+                pygame.mixer.music.play(loops=-1, fade_ms=Sound.MUSIC_FADE_IN)
+            except Exception:
+                pass
+ 
+    @staticmethod
+    def stop_music(fade_ms=None):
+        """Stop background music with fade-out."""
+        if not Sound._ready:
+            return
+        fade = fade_ms if fade_ms is not None else Sound.MUSIC_FADE_OUT
+        try:
+            pygame.mixer.music.fadeout(fade)
+        except Exception:
+            pass
+ 
+    # ── Named shortcuts (call these in App instead of play_sfx) ───────
+ 
+    @staticmethod
+    def on_open():
+        Sound.play_sfx("open", Sound.SFX_OPEN_FILE)
+ 
+    @staticmethod
+    def on_close():
+        Sound.stop_music()
+        Sound.play_sfx("close", Sound.SFX_CLOSE_FILE)
+ 
+    @staticmethod
+    def on_navigate():
+        Sound.play_sfx("navigate", Sound.SFX_NAVIGATE_FILE)
+ 
+    @staticmethod
+    def on_feed():
+        Sound.play_sfx("feed", Sound.SFX_FEED_FILE)
+ 
+    @staticmethod
+    def on_play():
+        Sound.play_sfx("play", Sound.SFX_PLAY_FILE)
+
 
 def title():
     return("""
@@ -222,10 +346,12 @@ class App():
     
     @staticmethod
     def main():
+        Sound.init()
         Spacer.screen_clear()
         print(title())
         time.sleep(0.4)
         input(manual_center("Press Enter to proceed..."))
+        Sound.play_music()
 
         # ── Pet Input ─────────────────────────────────────────────
         name = None
@@ -337,6 +463,7 @@ class App():
         Effects.slowtype(manual_center(f"Take good care of {my_pet.get_name()}! "), delay=0.01)
         Spacer.one_line_spacer()
         print(manual_center(Spacer.equal_spacer()))
+        Sound.on_close()
         time.sleep(2)
         Spacer.screen_clear()
     
