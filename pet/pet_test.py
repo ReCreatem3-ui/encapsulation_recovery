@@ -53,12 +53,22 @@ class Effects:
 
 class Sound:
     # ── File names (place these in pet/assets/sounds/) ─────────────────
-    MUSIC_BG_FILE   = "pet_care_bgm.wav"
-    SFX_OPEN_FILE   = "sfx_open.wav"
-    SFX_CLOSE_FILE  = "sfx_close.wav"
-    SFX_NAVIGATE_FILE = "sfx_navigate.wav"
-    SFX_FEED_FILE   = "sfx_feed.wav"
-    SFX_PLAY_FILE   = "sfx_play.wav"
+    MUSIC_BG_FILE     = "pet_care_bgm.mp3"
+    SFX_START_FILE    = "start.wav"
+    SFX_QUIT_FILE     = "quit.wav"
+    SFX_NAVIGATE_FILE = "select.wav"
+    SFX_ERROR_FILE    = "error.wav"
+    SFX_FEED_FILE     = "feed.wav"
+    SFX_PLAY_FILE     = "play.wav"
+    SFX_STAT_UP_FILE  = "stat_up.wav"
+    SFX_PROFILE_FILE  = "profile_card_view.wav"
+    SFX_CAT_FILE      = "cat.wav"  
+    SFX_DOG_FILE      = "dog.wav"
+    SFX_BIRD_FILE     = "bird.wav"
+    SFX_FISH_FILE     = "fish.wav"
+    SFX_TURTLE_FILE   = "turtle.wav"
+    SFX_RABBIT_FILE   = "rabbit.wav"
+
     
     # ── Volume levels (0.0 – 1.0) ─────────────────────────────────────
     MUSIC_VOLUME  = 0.4   # background music — keep lower than SFX
@@ -150,17 +160,21 @@ class Sound:
     # ── Named shortcuts (call these in App instead of play_sfx) ───────
  
     @staticmethod
-    def on_open():
-        Sound.play_sfx("open", Sound.SFX_OPEN_FILE)
+    def on_start():
+        Sound.play_sfx("start", Sound.SFX_START_FILE)
  
     @staticmethod
-    def on_close():
+    def on_quit():
         Sound.stop_music()
-        Sound.play_sfx("close", Sound.SFX_CLOSE_FILE)
+        Sound.play_sfx("quit", Sound.SFX_QUIT_FILE)
  
     @staticmethod
     def on_navigate():
         Sound.play_sfx("navigate", Sound.SFX_NAVIGATE_FILE)
+ 
+    @staticmethod
+    def on_error():
+        Sound.play_sfx("error", Sound.SFX_ERROR_FILE)
  
     @staticmethod
     def on_feed():
@@ -169,6 +183,38 @@ class Sound:
     @staticmethod
     def on_play():
         Sound.play_sfx("play", Sound.SFX_PLAY_FILE)
+ 
+    @staticmethod
+    def on_stat_up():
+        Sound.play_sfx("stat_up", Sound.SFX_STAT_UP_FILE)
+ 
+    @staticmethod
+    def on_profile():
+        Sound.play_sfx("profile", Sound.SFX_PROFILE_FILE)
+ 
+    @staticmethod
+    def on_cat():
+        Sound.play_sfx("cat", Sound.SFX_CAT_FILE)
+ 
+    @staticmethod
+    def on_dog():
+        Sound.play_sfx("dog", Sound.SFX_DOG_FILE)
+ 
+    @staticmethod
+    def on_bird():
+        Sound.play_sfx("bird", Sound.SFX_BIRD_FILE)
+ 
+    @staticmethod
+    def on_fish():
+        Sound.play_sfx("fish", Sound.SFX_FISH_FILE)
+ 
+    @staticmethod
+    def on_turtle():
+        Sound.play_sfx("turtle", Sound.SFX_TURTLE_FILE)
+ 
+    @staticmethod
+    def on_rabbit():
+        Sound.play_sfx("rabbit", Sound.SFX_RABBIT_FILE)
 
 
 def title():
@@ -351,6 +397,8 @@ class App():
         print(title())
         time.sleep(0.4)
         input(manual_center("Press Enter to proceed..."))
+        Sound.on_start()
+        time.sleep(0.2)
         Sound.play_music()
 
         # ── Pet Input ─────────────────────────────────────────────
