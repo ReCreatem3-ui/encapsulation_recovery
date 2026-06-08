@@ -8,7 +8,7 @@ class Spacer:
     """Utility class to print spacer lines."""
 
     @staticmethod
-    def equal_spacer(count=175):
+    def equal_spacer(count=70):
         return "=" * count
 
     @staticmethod
@@ -309,6 +309,73 @@ class App():
         print(manual_center(my_pet.profile_card()))
         Spacer.one_line_spacer()
         time.sleep(1.2)
+    
+    @staticmethod
+    def interactive_care(pet):
+        """Interactive care mode — player chooses to feed or play."""
+        while True:
+            Spacer.screen_clear()
+            print(title())
+            print(ascii_pet(pet.get_animal_type()))
+            print(separator("Interactive Pet Care"))
+            Spacer.one_line_spacer()
+            Effects.slowtype(manual_center("Feed (F) or Play (P)? Type 'Q' to finish"), delay=0.01)
+            Spacer.one_line_spacer()
+            print(manual_center(pet.profile_card()))
+            Spacer.one_line_spacer()
+            
+            choice = input(manual_center("Action (F/P/Q) : ")).strip().upper()
+
+            if choice == 'Q':
+                Spacer.screen_clear()
+                print(title())
+                print(manual_center("Time for rest..."))
+                time.sleep(2)
+                break
+            elif choice == 'F':
+                hunger_before = pet.get_hunger()
+                msg = pet.feed()
+                hunger_after = pet.get_hunger()
+                
+                Spacer.screen_clear()
+                print(title())
+                print(ascii_pet(pet.get_animal_type()))
+                print(manual_center(msg))
+                Spacer.one_line_spacer()
+
+                fullness_before = Pet.MAX_HUNGER - hunger_before
+                fullness_after = Pet.MAX_HUNGER - hunger_after
+                Effects.slowtype(manual_center("Fullness bar:", width=175), delay=0.015)
+                Spacer.one_line_spacer()
+                animate_stat("Fullness", fullness_before, fullness_after, step_delay=0.25)
+
+                Spacer.one_line_spacer()
+                print(manual_center(pet.profile_card()))
+                Spacer.one_line_spacer()
+                input(manual_center("Press Enter to continue..."))
+            elif choice == 'P':
+                happiness_before = pet.get_happiness()
+                msg = pet.play()
+                happiness_after = pet.get_happiness()
+                
+                Spacer.screen_clear()
+                print(title())
+                print(ascii_pet(pet.get_animal_type()))
+                print(manual_center(msg))
+                Spacer.one_line_spacer()
+
+                Effects.slowtype(manual_center("Happiness bar:", width=175), delay=0.015)
+                Spacer.one_line_spacer()
+                animate_stat("Happiness", happiness_before, happiness_after, step_delay=0.25)
+
+                Spacer.one_line_spacer()
+                print(manual_center(pet.profile_card()))
+                Spacer.one_line_spacer()
+                input(manual_center("Press Enter to continue..."))
+            else:
+                print(manual_center("    Invalid action. Please enter F, P, or Q."))
+                time.sleep(1.2)
+
 
 if __name__ == "__main__":
     App.main()
